@@ -408,7 +408,8 @@ const MEME={};
 const MKEYS=['shock','sad','angry','happy','side','finger','point'],
  EMO={shock:'😮',sad:'😢',angry:'😠',happy:'😄',side:'👀',finger:'🖕',point:'☝️'};
 let fl,hl,fTimer,fired='',coolUntil=0,last={k:'',n:0};
-const dbg=location.search.includes('debug'),TH={smile:.5,jaw:.4,wide:.25,brow:.4,down:.4,frown:.22,look:.45};
+window.dbg=window.dbg||function(){};/* MediaPipe's wasm loader calls a global dbg() */
+const DEBUG=location.search.includes('debug'),TH={smile:.5,jaw:.4,wide:.25,brow:.4,down:.4,frown:.22,look:.45};
 function pop(id,k){
  const t=g('t-'+id);if(!t)return;
  t.querySelectorAll('.pop').forEach(x=>x.remove());
@@ -499,9 +500,9 @@ function faceLoop(){
    last.n=k&&k==last.k?last.n+1:1;last.k=k;
    if(!k)fired='';
    if(k&&last.n>=(k=='side'?3:2)&&k!==fired&&Date.now()>coolUntil){fired=k;coolUntil=Date.now()+3500;pop('me',k);bcast({t:'meme',k})}
-   if(dbg){
-    let d=g('dbg');
-    if(!d){d=document.createElement('pre');d.id='dbg';d.style.cssText='position:fixed;left:8px;top:60px;z-index:70;background:#000a;padding:6px;border-radius:8px;font:11px monospace;pointer-events:none;margin:0';document.body.append(d)}
+   if(DEBUG){
+    let d=g('dbgbox');
+    if(!d){d=document.createElement('pre');d.id='dbgbox';d.style.cssText='position:fixed;left:8px;top:60px;z-index:70;background:#000a;padding:6px;border-radius:8px;font:11px monospace;pointer-events:none;margin:0';document.body.append(d)}
     d.textContent=Object.entries(info).map(([a,b])=>a+' '+b.toFixed(2)).join('\n')+'\nfingers '+hr.map(x=>x.toFixed(2)).join(' ')+'\nhand: '+(h||'-')+'\nmood: '+(k||'-');
    }
   }
